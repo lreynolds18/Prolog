@@ -1,0 +1,79 @@
+male(george).
+female(mum).
+male(spencer).
+female(kydd).
+female(elizabeth).
+male(philip).
+female(margaret).
+female(diana).
+male(charles).
+female(anne).
+male(mark).
+male(andrew).
+female(sarah).
+male(edward).
+male(william).
+male(harry).
+male(peter).
+female(zara).
+female(beatrice).
+male(eugenie).
+
+child(william, diana).
+child(william, charles).
+child(harry, diana).
+child(harry, charles).
+child(peter, anne).
+child(peter, mark).
+child(zara, anne).
+child(zara, mark).
+child(beatrice, andrew).
+child(beatrice, sarah).
+child(eugenie, andrew).
+child(eugenie, sarah).
+child(diana, spencer).
+child(diana, kydd).
+child(charles, elizabeth).
+child(charles, philip).
+child(anne, elizabeth).
+child(anne, philip).
+child(andrew, elizabeth).
+child(andrew, philip).
+child(edward, elizabeth).
+child(edward, philp).
+child(elizabeth, george).
+child(elizabeth, mum).
+child(margaret, george).
+child(margaret, mum).
+
+spouse(diana, charles).
+spouse(anne, mark).
+spouse(andrew, sarah).
+spouse(spencer, kydd).
+spouse(elizabeth, philip).
+spouse(george, mum).
+spouse(charles, diana).
+spouse(mark, anne).
+spouse(sarah, andrew).
+spouse(kydd, spencer).
+spouse(philip, elizabeth).
+spouse(mum, george).
+
+grandChild(X,Y) :- child(X,W), child(W,Y).
+greatGrandparent(X,Y) :- child(Y,W), child(W,V), child(V,X).
+brother0(X,Y) :- child(X,W), child(Y,W), male(X), X \= Y.
+brother(X,Y) :- setof(_, brother0(X,Y), _).
+sister0(X,Y) :- child(X,W), child(Y,W), female(X), X \= Y.
+sister(X,Y) :- setof(_, sister0(X,Y), _).
+daughter(X,Y) :- child(X,Y), female(X).
+son(X,Y) :- child(X,Y), male(X).
+aunt(X,Y) :- child(Y,W), sister(X,W).
+aunt(X,Y) :- child(Y,W), brother(V,W), spouse(V,X).
+uncle(X,Y) :- child(Y,W), brother(X,W).
+uncle(X,Y) :- child(Y,W), sister(V,W), spouse(V,X).
+brotherInLaw(X,Y) :- spouse(W,Y), brother(X,W).
+brotherInLaw(X,Y) :- sister(W,Y), spouse(X,W).
+sisterInLaw(X,Y) :- spouse(W,Y), sister(X,W).
+sisterInLaw(X,Y) :- brother(W,Y), spouse(X,W).
+firstCousin0(X,Y) :- (aunt(W,Y); uncle(W,Y)), child(X,W).
+firstCousin(X,Y) :- setof(_, firstCousin0(X,Y), _).
