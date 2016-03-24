@@ -1,0 +1,32 @@
+v --> [put].
+v --> [take].
+det --> [the].
+adj --> [red].
+adj --> [blue].
+adj --> [green].
+prep --> [on].
+n --> [cone].
+n --> [block].
+n --> [circle].
+n --> [square].
+n --> [cube].
+
+s --> v, np.
+pp --> prep, np.
+np --> det, adj, n, pp.
+np --> det, n, pp.
+np --> det, adj, n.
+np --> det, n.
+
+output([], []).
+output([XFirst | XRest], [_ | YRest]) :- 
+       ((XFirst == take) -> write(' taken');
+       (XFirst == put) -> write(' put');
+       det([XFirst],[]) -> (write(' '), write(XFirst));
+       prep([XFirst],[]) -> (write(' '), write(XFirst));
+       n([XFirst],[]) -> (write(' '), write(XFirst));
+       true),
+       output(XRest, YRest).
+
+command(X) :- s(X,[]), !, write('I have'), output(X, _), write('.').
+command(X) :- write('I do not understand you, please try again.').
